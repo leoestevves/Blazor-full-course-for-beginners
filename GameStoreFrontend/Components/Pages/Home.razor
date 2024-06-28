@@ -1,60 +1,47 @@
 ﻿@page "/"
 @using Models
+@using Clients
 
 <PageTitle>Game Catalog</PageTitle>
 
-<table class="table table-striped table-bordered table-hover">
-    <thead class="table-dark">
-        <th>Id</th>
-        <th>Name</th>
-        <th>Genre</th>
-        <th class="text-end">Price</th>
-        <th>Release Date</th>
-        <th></th>
-    </thead>
-    <tbody>
-        @foreach (var game in games){
-            <tr>
-                <td>@game.Id</td>
-                <td>@game.Name</td>
-                <td>@game.Genre</td>
-                <td class="text-end">@game.Price.ToString("C2")</td>
-                <td>@game.ReleaseDate</td>
-                <td>
-                    
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
+@if(games is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-bordered table-hover mt-3">
+        <thead class="table-dark">
+            <th>Id</th>
+            <th>Name</th>
+            <th>Genre</th>
+            <th class="text-end">Price</th>
+            <th>Release Date</th>
+            <th></th>
+        </thead>
+        <tbody>
+            @foreach (var game in games){
+                <tr>
+                    <td>@game.Id</td>
+                    <td>@game.Name</td>
+                    <td>@game.Genre</td>
+                    <td class="text-end">@game.Price.ToString("C2")</td>
+                    <td>@game.ReleaseDate</td>
+                    <td>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 @code
 {
-    private GameSummary[] games = 
-    [
-        new()
-        {
-            Id = 1,
-            Name = "Lost Ark",
-            Genre = "Action RPG",
-            Price = 19.99M,
-            ReleaseDate = new DateOnly(2019, 12, 4)
-        },
-        new()
-        {
-            Id = 2,
-            Name = "Final Fantasy XIV",
-            Genre = "MMORPG",
-            Price = 59.99M,
-            ReleaseDate = new DateOnly(2010, 9, 30)
-        },
-        new()
-        {
-            Id = 3,
-            Name = "Honkai Star Rail",
-            Genre = "Strategy",
-            Price = 29.99M,
-            ReleaseDate = new DateOnly(2023, 4, 23)
-        }
-    ];
+    private GamesClient client = new();
+    private GameSummary[]? games;
+
+    protected override void OnInitialized()
+    {
+        games = client.GetGames();       
+    }
 }
