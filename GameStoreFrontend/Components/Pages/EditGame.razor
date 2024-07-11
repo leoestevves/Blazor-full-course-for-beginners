@@ -89,9 +89,9 @@ else
 		}
 	}
 
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
-		genres = GenresClient.GetGenres();
+		genres = await GenresClient.GetGenresAsync();
 	}
 
 	private async Task HandleSubmitAsync()
